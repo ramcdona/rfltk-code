@@ -1,0 +1,9 @@
+For *nix, mingw and cygwin systems simply execute
+
+     /your/path/to/fltk-config --compile example.cpp
+
+which builds example executable. For MS VC6 you wil find simple project 
+file in visualc subdirectory. Otherwise you just need to compile 
+example.cpp (the file #include-s Fl_Signal.cpp for simplicity) and link
+ to fltk library (and dep. libs).
+

@@ -1,0 +1,471 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Fl_Fignal</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.2  (Win32)">
+	<META NAME="CREATED" CONTENT="20050609;14511456">
+	<META NAME="CHANGED" CONTENT="20050609;22444604">
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1>Fl_Signal</H1>
+<P><BR>A powerful callback and signal/slot library for FLTK</P>
+<ADDRESS>Author (c): Roman Kantor, e-mail: rkantor at tcd dot ie</ADDRESS>
+<P>Any comments, bug-fixes, documentation suggestions are very
+appreciated at above mentioned address.</P>
+<H3>License</H3>
+<P>This library is distributed under LGPL license + FLTK exceptions,
+see COPYING and also <A HREF="http://fltk.org/">http://fltk.org</A>.</P>
+<H3>Distribution</H3>
+<P>The library is supposed to be used in source form as it consists
+of only two files - <B>Fl_Signal.H</B> and <B>Fl_Signal.cpp</B>.
+Please, add <B>Fl_Signal.cpp</B> to your project and include
+<B>Fl_Signal.H</B> where appropriate. The distribution also includes
+an example program and this documentation. 
+</P>
+<H3>Compilers</H3>
+<P>The library was developed using gcc (2-95.2, gcc-3.x) and VisualC
+(tested with VC6). Other compilers are not tested. Please inform me
+about the compilation success or failure if you use something else.</P>
+<H3>Features:</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Type-safety of callbacks (signals,
+	slots)</P>
+	<LI><P STYLE="margin-bottom: 0cm">Both functions and class member
+	methods with any number parameters can be used (0-5 are implemented)
+		</P>
+	<LI><P STYLE="margin-bottom: 0cm">Multiple callbacks can be attached
+	to a widget or a node 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Callbacks can be dynamically
+	attached to / removed from a widget or a node 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Each argument of callback function
+	can be determined either by a value (parameter/value binding),
+	pointer to a variable or as a return value of a sub-call 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Return values can be either stored
+	in a variable (defined by a pointer), pushed to a sub-call, sent to
+	a node or used by attached slots as an argument 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">Special callback classes - Signals
+	and Slots can emit/accept values of any type and propagate the
+	callback event 
+	</P>
+	<LI><P>It is an add-on library, you can use both standard FLTK
+	callbacks and this library in your program</P>
+</UL>
+<OL>
+	<LI><H2>Introduction</H2>
+</OL>
+<P>Callbacks are formed by construction of a callback object - an
+instance of <B>Fl_Call </B>class.  Each callback is attached to a
+<B>source </B>(a widget or an instance of <B>Fl_Signal</B>)  which
+invokes the callback execution when a callback event occurs. The <B>
+</B>constructor of <B>Fl_Call </B>takes  a pointer to the widget or
+signal to which it is attached as the first argument. The other
+arguments determine a pointer to  the function (or the object and a
+class method) to be called and information about parameters to be
+used when the callback is executed. The parameters can be determined
+in various ways, including using return values of sub-calls. If
+necessary, callback return value can be stored in a variable or sent
+to following callbacks.  The callback is removed from the node
+(widget) when the  callback object (an instance of <B>Fl_Call</B>) is
+destructed. You can attach any number of callbacks to a widget or a
+signal: when called, they are executed in order of their creation.
+You can also individually remove callbacks from widgets/signals just
+by deleting particular callback. Every callback can also function as
+a <B>source </B>(signal): you can attach additional callback(s) to
+it. They are called after execution of the parent and they can use
+its return value as some parameter.</P>
+<P>Slots (instances of class <B>Fl_Slot</B>) are special callbacks.
+They do not bring any new functionality but they further simplify the
+syntax of callbacks constructors. A slot executes a function or a
+method with one parameter and use <B>value()</B> method of the parent
+<B>source</B> (widget or signal to which they are attached) to
+evaluate its argument. This is a very common case  in FLTK where the
+most common and the most important methods are called &rdquo;value&rdquo;.</P>
+<P>Signals (<B>Fl_Signal</B> instances) are, apart from widgets,
+another objects to which callbacks can be attached. This allows to
+build complicated topology for callback propagation where callback
+event my originate from many sources or target many objects which
+should respond to a callback event.</P>
+<P>The API is described from user point of view as the usage is much
+simpler that would be detailed description of the syntax with all
+overloaded and highly templated functions.</P>
+<P><BR><BR>
+</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>Fl_Call &lt;typename T = void&gt;(...)</B></FONT>
+<FONT SIZE=3><B>Fl_Slot &lt;typename T = void&gt;(...)</B></FONT>
+<FONT SIZE=3><B>Fl_Signal &lt;typename T = void&gt;(...)</B></FONT>
+</PRE><P>
+<BR>Additionally, there are two functions for evaluation of
+parameters as a subcalls:</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>fl_call(...)</B></FONT>
+<FONT SIZE=3><B>fl_slot(...)</B></FONT></PRE><P>
+The power of the library comes from reach of constructors of callback
+classes. Following symbols are used for description of callback
+constructor parameters: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">source
+	</FONT></B><SPAN STYLE="font-weight: medium"><FONT FACE="Times New Roman, serif">a
+	pointer to an object to which callbacks can be attached (an instance
+	of any FLTK widget (<B>Fl_Widget</B> subclass), <B>Fl_Signal,</B>
+	<B>Fl_Call </B><SPAN STYLE="font-weight: medium">or</SPAN><B>
+	Fl_Slot</B>),</FONT></SPAN></P>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">function</FONT></B>
+	- a pointer to a global C/C++ function or class static function 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">method</FONT></B>
+	- a pointer to a class member function 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">object</FONT></B>
+	- represents the object upon which a method (class member function)
+	is executed.</P>
+	<LI><P STYLE="margin-bottom: 0cm"><FONT FACE="courier new, courier, monospace"><B>argument</B>
+	</FONT>- represents the argument to be supplied to callback
+	function/method  (value, pointer to a variable or a subcall
+	(<B>fl_call</B>) construct)</P>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">result</FONT></B>
+	- represents the object which accepts the result of callback
+	function ( pointer to a variable or a subcall (<B>fl_slot</B>)
+	construct)</P>
+	<LI><P STYLE="margin-bottom: 0cm"><B><FONT FACE="courier new, courier, monospace">[parameter]</FONT></B>
+	- brackets indicate that the parameter does not need to be supplied
+	in a certain circumstances</P>
+</UL>
+<OL>
+	<LI><H2>Class description</H2>
+</OL>
+<H3>Class Fl_Call &lt;typename T = void&gt;</H3>
+<P>This is a main class for the callbacks. Each instance encapsulates
+a  function or a method you want to execute when callback event
+occurs. It also carries information about the function arguments.
+<B>Fl_Call</B> is always attached to a source. 
+</P>
+<H3>Constructors</H3>
+<P>In <B>Fl_Call</B> constructor you specify the callback function
+(or class member method) with can take up to 5 parameters (should be
+enough for everybody :-),  the parameters used and (optionally) what
+should be made with the result value. Although callback constructors
+are highly templated, the syntax is relatively simple as the template
+types are guessed by the compiler and do not need to be explicitly
+specified. For that reason the class is described from urage point of
+view &ndash; not using detailed syntax. The constructors have a form 
+</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>Fl_Call&lt;[T]&gt;(source, function, argument_1, argument_2, ... [, result])</B></FONT>
+<FONT SIZE=3><B>Fl_Call&lt;[T]&gt;(source, [object,] method, argument_1, argument_2, ... [, result])</B></FONT></PRE><P>
+Usually you omit template parameter. This parameter is required <SPAN STYLE="font-weight: medium"><I>only</I></SPAN><B>
+</B>if you want to attach child callbacks to it <SPAN STYLE="font-weight: medium"><I>and</I></SPAN>
+you want to use return value of the parent for their evaluation. If
+you do not want to attach any callbacks to the callback structure <I>or</I>
+you do not care about the result, just write <B>Fl_Call&lt;&gt;(...)</B>.
+The first parameter <B><FONT FACE="Courier, monospace">source</FONT></B>
+is usually a pointer to FLTK widget but it can be also an another
+callback. Or signal (see <B>Fl_Signal</B>) The parameters <B><FONT FACE="courier new, courier, monospace">function</FONT></B>
+or <B><FONT FACE="courier new, courier, monospace">method</FONT></B>
+are a pointers to the function or a class member method to be
+executed. For the later the <B><FONT FACE="Courier, monospace">object</FONT></B>
+represents an object upon which the method is executed. If the <B><FONT FACE="Courier, monospace">object</FONT></B>
+is missing, it is assumed that <B><FONT FACE="Courier, monospace">source
+</FONT></B>also represents the <B><FONT FACE="Courier, monospace">object
+</FONT></B>itself and the method is executed upon it. This is useful
+for the callbacks attached to a FLTK widget when you want to use one
+of the caller methods as a callback. Arguments can be defined in a
+few ways, using either:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">a pointer to a variable from which
+	the value is taken during callback execution</P>
+	<LI><P STYLE="margin-bottom: 0cm">a value supplied in the time of
+	callback construction (parameter/value binding) 
+	</P>
+	<LI><P>a subcall using <B><FONT FACE="monospace">fl_call(...)</FONT></B>
+	construct, this sub-callback is called prior the parent is executed</P>
+</UL>
+<P>Theses rules apply also to <B><FONT FACE="courier new, courier, monospace">object</FONT></B>
+upon which the method is executed. Although usually it is just a
+pointer to a particular class instance, you may occasionally use
+other forms if you want dynamically determine the object upon which
+the callback should be executed. Optionally, you can determines what
+should be done with the callback return value by supplying the <B><FONT FACE="courier new, courier, monospace">result</FONT></B>
+parameter. The  <B><FONT FACE="courier new, courier, monospace">result</FONT></B>
+can have a form of::</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">a pointer to a variable in which
+	the value should be stored 
+	</P>
+	<LI><P STYLE="margin-bottom: 0cm">a subcall to a single-argument
+	function or method using <B><FONT FACE="courier new, courier, monospace">fl_slot(...)</FONT></B>
+	construct</P>
+	<LI><P STYLE="margin-bottom: 0cm">a pointer to a signal (an instance
+	of <B>Fl_Signal</B>, <B>Fl_Call</B> or <B>Fl_Slot</B>) with non-void
+	template type.</P>
+	<P STYLE="margin-bottom: 0cm"></P>
+</UL>
+<P>In the latest case callbacks and slots attached to the parent
+callback are called after the parent. Slots will take the return
+value of the parent as the argument.</P>
+<H4>Example 1:</H4>
+<P STYLE="margin-left: 2cm; margin-bottom: 0cm"><FONT SIZE=2><B><FONT FACE="monospace">...</FONT><BR><FONT FACE="monospace">int
+square(int a){return a*a;}</FONT><BR><FONT FACE="monospace">int
+sum(int a1, int a2, int a3, int a4) { return a1 + a2 + a3 + a4; }
+</FONT><BR><FONT FACE="monospace">void print_result(int i) {
+printf(&quot;Hello, the result is %i\n&quot;, i); }</FONT><BR><FONT FACE="monospace">...</FONT></B></FONT></P>
+<P STYLE="margin-left: 2cm; margin-bottom: 0cm"><FONT SIZE=2><B><BR><FONT FACE="monospace">main(...)</FONT><BR><FONT FACE="monospace">{</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">...</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">int
+i = 1;</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">Fl_Call&lt;&gt;
+callback(widget, &amp;sum, 3, i, &amp;i, fl_call(&amp;square, &amp;i),
+fl_slot(&amp;print_result));</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">i
+= 2;</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">widget-&gt;do_callback();</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">...</FONT><BR><FONT FACE="monospace">}</FONT></B></FONT></P>
+<P><BR>The above example program will print (surprise!):</P>
+<P STYLE="margin-left: 1.06cm; margin-bottom: 0cm"><FONT FACE="monospace">Hello,
+the result is 10</FONT></P>
+<P><BR>How does it work: <BR>The callback structure executes function
+<B>sum(...)</B> as its main callback. As a first parameter, it uses
+<B>3</B>. As a second parameter, it uses the value from <B>i</B> when
+the callback was constructed (<B>1</B>). For third parameter it uses
+the value from <B>i</B> during execution (vecause it was defined as a
+pointer to the variable) , which is <B>2</B>. But before calling
+<B>sum(...)</B> function, it executes a subcall &ndash; function
+<B>square(...)</B> upon variable <B>i</B>.  Because <B>i</B> was here
+again referenced as a pointer, this square gives <B>4</B>. The result
+(10) is pushed to a &quot;slot-like&quot; functor (see below)<B>
+print_result(...)</B>, which prints the result. 
+</P>
+<H3>Methods:</H3>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>void Fl_Call&lt;[T]&gt;::disable();</B></FONT>
+<FONT SIZE=3><B>void Fl_Call&lt;[T]&gt;::enable();</B></FONT>
+<FONT SIZE=3><B>void Fl_Call&lt;[T]&gt;::disable(const void * o);</B></FONT></PRE><P STYLE="margin-left: 2cm">
+<BR><BR>
+</P>
+<P>These methods allow to suspends temporarily the callback
+execution. The last method informs the callback that it should not be
+executed if callback originator  (usually a widget which starts the
+callback propagation) is equal to <B><FONT FACE="courier new, courier, monospace">o</FONT></B>.
+This might be a situation when the callbacks propagate (through some
+cycled chain or a tree) back to its originator, but you do not want
+to execute the redundant update (because the originator is already
+updated). For example when a value of several active widgets is
+synchronized, they may send signal to the others via the same
+intermediate node (see class <B>Fl_Signal</B>). But because the
+invoking widget may &quot;listen&rdquo; (be connected) to the same
+node, the event would return back (and depending on particular code
+it can even cause an infinite loop). In this case you can avoid that
+redundancy by setting this disable parameter to itself.</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>T Fl_Call&lt;T&gt;::value();</B></FONT>
+</PRE><P>
+This method is only available if you supply non-void type <B>T</B>.
+In such a case the callback function must have a non-void return
+value (<SPAN STYLE="font-weight: medium"><I>compatible</I></SPAN>
+with <B>T</B>) and you can retrieve the last result of the execution
+by this method. If you do not supply this parameter(or specify it as
+void) it <SPAN STYLE="font-weight: medium"><I>does not</I></SPAN>
+mean that callback function must return void . It just means that the
+return value is not accessible for later use (although in a case you
+have supplied a  variable pointer as an optional <B>result</B>
+parameter, it is still accessible from there).</P>
+<H3><B>class</B> Fl_Slot &lt;typename T = void&gt;</H3>
+<P>This is a special case of <B>Fl_Call</B> which simplifies the
+syntax for special callbacks with one argument. This argument is not
+determined by the callback constructor. Instead, a return value of a
+<B>value() </B>method of the <B>source </B>(a widget or a non-void
+callback) to which it is attached is used. The constructor is similar
+to the <B>Fl_Call </B>one - with the exception that the argument is
+not specified:</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>Fl_Slot&lt;[T]&gt;(source, function [, result])</B></FONT>
+<FONT SIZE=3><B>Fl_Slot&lt;[T]&gt;(source, object, method [, result])</B></FONT>
+<FONT SIZE=3><B>Fl_Slot&lt;[T]&gt;(source, object [,result])</B></FONT></PRE><P>
+and represents the callback for execution of 
+<B>function(source-&gt;value()) </B>or
+<B>object-&gt;method(source-&gt;method())</B>. The third form even
+does not specify the method to be called. In such a case it uses the
+<B>value(..)</B> method of the object (this time the one which takes
+an argument) as a default callback, so when the slot is executed, it
+performs execution equivalent to
+<B>object-&gt;value(source-&gt;value())</B>;Optionally, the return
+value can be pushed to a &quot;result&quot; variable or even to an
+another slot. So if you derive your own widget class, it makes very
+good sense to name your important method as &quot;value()&quot; to
+simplify the syntax.  But if you don't, do not worry, you can always
+use &quot;ordinary&quot; callback <B>Fl_Call</B>.</P>
+<H3>class Fl_Signal &lt;typename T = void&gt;</H3>
+<P>Signal instances represent additional callback <B>source</B>s
+(apart from&nbsp; FLTK widgets) &ndash; objects to which <I>callbacks</I>
+can be attached. Similarily to the <B>Fl_Call </B>class, if the type
+<B>T</B> is supplied you can also attach  slots (see <B>Fl_Slot</B>)
+to it. In such a case  <B>T</B> <B>Fl_Signal::value()</B> is used to
+determine the argument. <B>Fl_Signal</B>(s) can be used to build a
+tree-like callback propagation structure. A signal can also be used
+as an intermediate node when you want to sent the same callback event
+from various sources (many widgets) and invoke more complicated
+tasks. And remember: all callbacks (<B>Fl_Call</B> and <B>Fl_Slot
+</B>instances)  are signals too so you can attach another callbacks
+to them.</P>
+<H3>Constructor:</H3>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>Fl_Signal&lt;[T}&gt;::Fl_Signal() </B></FONT></PRE><P>
+<BR><BR>
+</P>
+<P>If you use the second form of the constructor with non-void type
+<B>T</B>, you can attach to the signal not only callbacks (<B>Fl_Call</B>
+instances) but also slots (see <B>Fl_Slot</B>). The  constructor then
+takes the initial value to be uses as the argument for slots. 
+</P>
+<H3>Methods:</H3>
+<P>Fl_Signal have all methods found in Fl_Call (including value() in
+non-void case) plus additional commands for explicit execution of
+callbacks attached: <BR>&nbsp; 
+</P>
+<PRE STYLE="margin-left: 2cm; margin-bottom: 0.5cm"><FONT SIZE=3><B>void Fl_Signal&lt;&gt;::operator() ()</B></FONT></PRE><P STYLE="font-weight: medium">
+This function executes all callbacks attached to a <B>void</B>
+signal.</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>void Fl_Signal&lt;T&gt;::operator() (T value)</B></FONT>
+<FONT SIZE=3><B>void Fl_Signal&lt;T&gt;::value(T value)</B></FONT></PRE><P>
+&nbsp;These forms of execution are available valid for non-void
+signals. They perform the same task - execut all callbacks and slots
+attached to it. In a case of slots <B>value</B> is used to determine
+their argument.</P>
+<H3><BR><BR>
+</H3>
+<OL>
+	<LI><H2>Global functions</H2>
+</OL>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>fl_call(function, argument1, ... [, result])</B></FONT>
+<FONT SIZE=3><B>fl_call(object, method, argument1, ... [, result])</B></FONT></PRE><P>
+The purpose of these function is for the use within callback
+(<B>Fl_Call</B>) constructors for making subcals and use its return
+value for evaluation of the parameter(s).</P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=3><B>fl_slot(function, [, result])</B></FONT>
+<FONT SIZE=3><B>fl_slot(object, method, [, result])</B></FONT></PRE><P>
+This construct can be used instead of <B>result</B> parameter (in
+<B>Fl_Call</B> or <B>Fl_Slot</B> constructors)  to push the result to
+slot-like subcall. You can also use them within other <B>fl_call</B>
+and <B>fl_slot </B>(s), the levels are not limited (Note: of course
+these functions do not execute sub-callbacks during callback
+construction, but they build a sub-call functor which is invoked when
+the callback is executed). 
+</P>
+<P><B>Example 2:</B></P>
+<P>Suppose uou want to build a callback which should perform callback
+ <B>target-&gt;set(source-&gt;get())</B> whenever <B>button</B> is 
+pressed. There are a fe ways to do it:<BR><FONT SIZE=2><BR></FONT>a)
+ugly (without the use of <B>fl_call</B> or <B>fl_slot</B>) consisting
+of two callbacks and storing the value in an intermediate variable <B>i</B></P>
+<PRE STYLE="margin-left: 2cm"><FONT SIZE=2><B>int i; </B><SPAN STYLE="font-weight: medium">// temporary storage</SPAN></FONT>
+<FONT SIZE=2><B>int main(...){</B></FONT>
+  <FONT SIZE=2><B>...</B></FONT>
+  <FONT SIZE=2><B>Fl_Call&lt;&gt;(button, source, &amp;Source::get, &amp;i); </B><SPAN STYLE="font-weight: medium">// stores result in </SPAN><B>i</B></FONT>
+  <FONT SIZE=2><B>Fl_Call&lt;&gt;(button, target, &amp;Target::set, &amp;i); </B><SPAN STYLE="font-weight: medium">// updates target according to </SPAN><B><SPAN STYLE="font-style: normal">i</SPAN></B></FONT>
+  <FONT SIZE=2><B>...</B></FONT>
+<FONT SIZE=2><B>}</B></FONT>
+</PRE><P>
+<FONT SIZE=3>b) nice (with the use of<B> fl_call</B> subcall)</FONT></P>
+<PRE STYLE="margin-left: 2cm; margin-bottom: 0.5cm"><FONT SIZE=2><B>Fl_Call&lt;&gt;(button, target, &amp;Target::set, fl_call(source, &amp;Source::get)); </B></FONT></PRE><P>
+c) nice <FONT SIZE=3>(with the use of<B> fl_slot</B> &ldquo;aftercall&rdquo;)</FONT></P>
+<PRE STYLE="margin-left: 2cm; margin-bottom: 0.5cm"><FONT SIZE=2><B>Fl_Call&lt;&gt;(button, source, &amp;Source::get, fl_slot(target, &amp;Target::set))</B>; </FONT></PRE><P>
+<BR><BR>
+</P>
+<OL>
+	<LI><H2>Placement of callback constructors and destructors</H2>
+</OL>
+<P>The callbacks are usually constructed inside or immediately after
+the object to which they are related</P>
+<H4>Example 3:</H4>
+<P>If a widget <B>w</B> &ldquo;listens&rdquo; (using method
+<B>update(...)</B>) to the <B>value()</B> method of the <B>settings</B>
+source, the code should look like:</P>
+<PRE STYLE="margin-left: 2cm"><B>Widget * w = new Widget(...);</B>
+<B>Fl_Slot &lt;&gt; * cb = new Fl_Slot&lt;&gt;(settings, w,  &amp;Widget::update)</B>
+<B>...</B>
+<B>...</B>
+<B>delete cb;</B>
+<B>delete w;</B></PRE><H4>
+Example 4:</H4>
+<P>You can also include callback as a member of your class (like in
+example.cpp program) if your class is home-brew one. In such a case
+the callback should be properly initialized:</P>
+<PRE STYLE="margin-left: 2cm"><B><FONT FACE="monospace">class My_Widget:public ...{<BR>public:<BR>  Fl_Slot&lt;&gt; slot; </FONT></B><SPAN STYLE="font-weight: medium"><FONT FACE="monospace">// a callback declaration </FONT></SPAN><B><BR>  <FONT FACE="monospace">...</FONT><BR>  <FONT FACE="monospace">My_Widget(...) : slot(settings,this, My_Widget::update){ </FONT></B><SPAN STYLE="font-weight: medium"><FONT FACE="monospace">// initialization of the callback</FONT></SPAN><B><BR>    <FONT FACE="monospace">...</FONT><BR>    <FONT FACE="monospace">}</FONT><BR><FONT FACE="monospace">}</FONT></B>
+</PRE><H4>
+Example 5:</H4>
+<P>In the above example the callback is automatically removed when
+the class object is destructed. The other approach&nbsp; is to
+construct callbacks using operator <FONT FACE="courier new, courier, monospace">new</FONT>,
+in such a case you have to handle its destruction:</P>
+<H4><BR><BR>
+</H4>
+<P STYLE="margin-left: 1.06cm; margin-bottom: 0cm"><FONT FACE="monospace">class
+My_Widget</FONT><BR><FONT FACE="monospace">{</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">Fl_Slot&lt;&gt; * slot;</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">...</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">My_Widget(...){</FONT><BR>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">slot = new
+Fl_Slot&lt;&gt;(settings, this, My_Widget::update)</FONT><BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">...</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">}</FONT><BR>&nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">~My_Widget(){</FONT><BR>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">delete slot;</FONT><BR>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+<FONT FACE="monospace">...</FONT><BR>&nbsp;&nbsp;&nbsp; <FONT FACE="monospace">}<BR>}</FONT></P>
+<P><BR>If a callback is attached to a FLTK widget, the callback must
+be destructed before the widget to which it is attached. An attempt
+to destruct callback object attached to non-existing widget would
+cause segfault.. Destruction of widget does not delete callback
+structures. If you want to delete widget before you destruct
+callbacks, you can use&nbsp; function.</P>
+<PRE STYLE="margin-left: 1.06cm; margin-bottom: 0.5cm"><FONT FACE="monospace"><B>fl_detach_callbacks(widget)</B></FONT></PRE><P>
+This function however does not delete callback structures themselves
+because they might be destructed elsewhere (ie. you have them as a
+members of classes etc):</P>
+<H4>Example 4:</H4>
+<PRE STYLE="margin-left: 1.06cm; margin-bottom: 0.5cm"><FONT FACE="monospace">Widget * widget = new Widget(...)</FONT>
+<FONT FACE="monospace">Fl_Call * callback = new Fl_Call(widget, ...);</FONT>
+<FONT FACE="monospace">...</FONT>
+<FONT FACE="monospace">...</FONT>
+<FONT FACE="monospace">delete widget;</FONT>
+<FONT FACE="monospace">fl_detach_callbacks(widget);</FONT>
+<FONT FACE="monospace">delete callback;  //  OK, callback is de-attached</FONT></PRE><P>
+<BR><BR>
+</P>
+<OL>
+	<LI><H2>Additional comments</H2>
+</OL>
+<H3 STYLE="font-weight: medium">Compatibility of types</H3>
+<P>The argument types of callback functions (result types etc) do not
+need to match exactly the type to which parameter is evaluated, but
+they have to be compatible. You can pass pointer to Fl_Window * if
+the callback function takes Fl_Widget * etc. You can also pass
+&quot;double&quot; result to &quot;int&quot; slot etc. as long as the
+conversion between types exist (although in later case the compiler
+will complain a little bit by a warning).</P>
+<H3 STYLE="font-weight: medium">Use of overloaded functions and
+methods</H3>
+<P>The use of overloaded functions and methods is more tricky as the
+compiled does not know which one do you want to use. In such a case
+you have to give it a hint by explicitly supplying the function type.
+For instance there exist two overloaded methods for Fl_Input, so
+choosing the one which accepts const char * char argument would look
+like</P>
+<P STYLE="margin-left: 1.06cm; margin-bottom: 0cm"><FONT FACE="monospace">(int
+(Fl_Input::*)(const char *))Fl_Input::value</FONT></P>
+<P><BR>Note, that using slots helps to avoid this somewhat verbose
+syntax because slots &quot;know&quot; which one to use - as long as
+they differ by the number of parameters.<B><BR></B><BR><BR>
+</P>
+<OL>
+	<LI><H2>Example program</H2>
+</OL>
+<P>The example program (source example.cpp in /test subdirectory)
+demonstrates the use of library in signal/slot manner. Font size
+setting widget sets the font size of all text input widgets in all
+opened windows. Additionally the text in all windows is synchronised,
+so each text widget informs the others about its value when changed.
+You can create/destroy as many windows as you wish, all callbacks are
+created/removed on the fly. 
+</P>
+<P>Each callback is extensively commented in the source file. There
+is a VC6 project file in /visualc subdirectory and a gcc makefile.
+You may need to tweak a little bit the makefile according to your
+particular compiler and FLTK installation, in particular variables CC
+(your compiler) and FL (your root FLTK include directory). If you do
+not use gcc or VC, good luck!<BR><BR><B>Bye, <FONT SIZE=4><BR><BR>Roman</FONT></B></P>
+</BODY>
+</HTML>
