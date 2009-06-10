@@ -46,20 +46,22 @@ void cb_widget_wrap(Fl_Widget * w, void * data){
 
 void widget_update_callback(void * n, Fl_Call_ * what,Fl_Call_ * by){
 	Fl_Call_ * is = (Fl_Call_ *)(((Fl_Widget *)n)->user_data());
-	if(is == what)
+	if(is == what){
 		if(what==by) //it is the last callback - removing...
 			((Fl_Widget *)n)->callback(&Fl_Widget::default_callback);
 		else
-			((Fl_Widget *)n)->user_data(by);	
+			((Fl_Widget *)n)->user_data(by);
+	}
 };
 
 
 void node_update_callback(void * n, Fl_Call_ * what,Fl_Call_ * by){
-	if((Fl_Call_ *)(((Fl_Signal_ *)n)->callbacks) == what)
+	if((Fl_Call_ *)(((Fl_Signal_ *)n)->callbacks) == what){
 		if(what==by) //it is the last callback - removing ....
 			((Fl_Signal_ *)n)->callbacks=0;
 		else
-			((Fl_Signal_ *)n)->callbacks=by;	
+			((Fl_Signal_ *)n)->callbacks=by;
+	}
 };
 
 
@@ -95,7 +97,7 @@ void attach_callback(Fl_Widget * w, Fl_Call_ * c){
 			c->prev_=last;
 			last->next_->prev_=c;
 			last->next_=c;
-		}
+  }
 		w->user_data(c);
 	}else
 		w->callback(&cb_widget_wrap, c);
