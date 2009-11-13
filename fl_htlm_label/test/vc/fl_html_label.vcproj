@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="cartesian"
+	Name="fl_html_label"
 	ProjectGUID="{703FE3E7-E692-462F-8876-807FD46399C5}"
 	>
 	<Platforms>
@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\cartesian_"
-			IntermediateDirectory=".\cartesian_"
+			OutputDirectory=".\fl_html_label_"
+			IntermediateDirectory=".\fl_html_label_"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -40,19 +40,19 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\cartesian_/cartesian.tlb"
+				TypeLibraryName=".\fl_html_label_/fl_html_label.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,.."
+				AdditionalIncludeDirectories="..\,..\..\..\..\fltk"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\cartesian_/cartesian.pch"
-				AssemblerListingLocation=".\cartesian_/"
-				ObjectFile=".\cartesian_/"
-				ProgramDataBaseFileName=".\cartesian_/"
+				PrecompiledHeaderFile=".\fl_html_label_/fl_html_label.pch"
+				AssemblerListingLocation=".\fl_html_label_/"
+				ObjectFile=".\fl_html_label_/"
+				ProgramDataBaseFileName=".\fl_html_label_/"
 				BrowseInformation="1"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -70,14 +70,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltkd.lib wsock32.lib comctl32.lib"
-				OutputFile="../test/cartesiand.exe"
+				AdditionalDependencies="fltkimagesd.lib fltkd.lib wsock32.lib comctl32.lib"
+				OutputFile="../test/fl_html_labeld.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\fltk\lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\cartesian_/cartesiand.pdb"
+				ProgramDatabaseFile=".\fl_html_label_/fl_html_labeld.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -93,7 +93,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\cartesian_/cartesian.bsc"
+				OutputFile=".\fl_html_label_/fl_html_label.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -135,7 +135,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/cartesian.tlb"
+				TypeLibraryName=".\Release/fl_html_label.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -143,10 +143,10 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,.."
+				AdditionalIncludeDirectories="..\,..\..\..\..\fltk"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="2"
-				PrecompiledHeaderFile=".\Release/cartesian.pch"
+				PrecompiledHeaderFile=".\Release/fl_html_label.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -165,13 +165,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib wsock32.lib comctl32.lib"
-				OutputFile="../test/cartesian.exe"
+				AdditionalDependencies="fltkimages.lib fltk.lib wsock32.lib comctl32.lib"
+				OutputFile="../test/fl_html_label.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="..\..\..\..\fltk\lib"
 				IgnoreDefaultLibraryNames="libcd"
-				ProgramDatabaseFile=".\Release/cartesian.pdb"
+				ProgramDatabaseFile=".\Release/fl_html_label.pdb"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -187,7 +187,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/cartesian.bsc"
+				OutputFile=".\Release/fl_html_label.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
