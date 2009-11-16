@@ -71,7 +71,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkimagesd.lib fltkd.lib wsock32.lib comctl32.lib"
-				OutputFile="../test/fl_html_labeld.exe"
+				OutputFile="../fl_html_labeld.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\fltk\lib"
@@ -166,7 +166,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltkimages.lib fltk.lib wsock32.lib comctl32.lib"
-				OutputFile="../test/fl_html_label.exe"
+				OutputFile="../fl_html_label.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\..\fltk\lib"

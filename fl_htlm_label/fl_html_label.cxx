@@ -73,10 +73,11 @@ public:
 
     int st = set_value(l.value);
 
-    int iw = 0; //2 * l.size;// minimum size
+    int iw = 0;//w; // minimum size
     int th = 0;
     if(l.image){
-      iw = l.image->w();
+      if(l.image->w()>iw)
+        iw = l.image->w();
       th = l.image->h();
     }
     Fl_Widget::w(iw + Fl::scrollbar_size()); // set initial width to zero (excluding scrollbar) for formatting but allow for image width
@@ -91,11 +92,12 @@ public:
   }
 
 
-  void draw(const Fl_Label& l, int X, int Y, int W, int H, Fl_Align align){
-    int tw, th;
-   
+  void draw(const Fl_Label& l, int X, int Y, int W, int H, int align, bool do_align = 1){
+    int tw = 0;
+    int th;
     set_value(l.value);
     measure(l, tw, th);
+
     if(align & FL_ALIGN_BOTTOM)
       Y += H - th;
     else if(!(align & FL_ALIGN_TOP))
@@ -117,13 +119,15 @@ public:
       l.image->draw(ix, iy);
 
     }
-    if(align & FL_ALIGN_RIGHT){
-      if(align & FL_ALIGN_LEFT) // center
-        X += (W - hsize_)/2;
-      else
-        X += (W - hsize_);
-    }else if(!(align & FL_ALIGN_LEFT)) // center
-        X += (W - hsize_)/2;
+    if(do_align){
+      if(align & FL_ALIGN_RIGHT){
+        if(align & FL_ALIGN_LEFT) // center
+          X += (W - hsize_)/2;
+        else
+          X += (W - hsize_);
+      }else if(!(align & FL_ALIGN_LEFT)) // center
+          X += (W - hsize_)/2;
+    }
       
 
     // resize the widget INCLUDING scrollbart for proper drawing and avoiding clipping
@@ -182,13 +186,34 @@ void fl_draw_html(const char * html_text, int x, int y, int w, int h, Fl_Align a
   html_helper.draw(l, x, y, w, h, align);
 }
 
+void fl_draw_html(const char * html_text, int x, int y){
+  Fl_Label l;
+  l.value =  html_text;
+  l.font = fl_font();
+  l.size = fl_size();
+  l.color = fl_color();
+  l.image = 0;
+  html_helper.draw(l, x, y, 0, 0, 0, 0);
+}
+
 void fl_measure_html(const char * html_text, int &w, int &h){
   Fl_Label l;
   l.value =  html_text;
   l.font = fl_font();
   l.size = fl_size();
   l.image = 0;
+  w = 0;
   html_helper.measure(l, w, h);
+}
+class Fl_Named_Image:public Fl_Shared_Image{
+public:
+  Fl_Named_Image(const char * name, Fl_Image *im):Fl_Shared_Image(name, im){add();}
+};
+
+Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name){
+  Fl_Shared_Image * i = Fl_Shared_Image::find(name);
+  if(i) return i;
+  return new Fl_Named_Image(name, im);
 }
 
 

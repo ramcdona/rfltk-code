@@ -34,24 +34,25 @@ FL_EXPORT Fl_Labeltype fl_define_html_label(int position);
 
 // Drawing and measurement functions for labeltypes.
 // These functions should be used for the definition
-// of the HTMT labeltype using Fl::set_labeltype()
+// of the HTML labeltype using Fl::set_labeltype() function.
 
 FL_EXPORT void fl_draw_html(const Fl_Label *label, int x, int y, int w, int h, Fl_Align align);
 FL_EXPORT void fl_measure_html(const Fl_Label *label, int &w, int &h);
 
 // Some usefull functions to directly draw or measure a HTML text string.
 // The functions use current fl_font() and fl_size() as the base font
-// parameters for formatting and fl_color() as the default text color.
+// parameters for formatting and fl_color() as the base text color.
 
+FL_EXPORT void fl_draw_html(const char * html_text, int x, int y);
 FL_EXPORT void fl_draw_html(const char * html_text, int x, int y, int w, int h, Fl_Align align, Fl_Image* img =0);
 FL_EXPORT void fl_measure_html(const char * html_text, int &w, int &h);
 
-// A trick to use memory images within html labels/strings is creating "named" shared image.
-// We need to make constructor public
+// A trick to use in-memory images within html labels/strings is creating "named" shared image.
+// We need to make constructor public and register the name.
 
-class Fl_Named_Image:public Fl_Shared_Image{
-  Fl_Named_Image(const char * name, Fl_Image *im):Fl_Shared_Image(name, im){}
-};
+
+
+Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name);
 
 
 #endif // _fl_html_label_h_
