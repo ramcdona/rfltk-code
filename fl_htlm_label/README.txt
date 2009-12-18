@@ -1,12 +1,12 @@
 fl_html_label library
-(c) 2009 Roman Lantor
+(c) 2009 Roman Kantor
 License: LGPL + FLTK exceptions, see COPYING.txt
 
 
-fl_html_label is a small library (about 200 lines) for fltk 1.1.x which defines new labeltype FL_HTML_LABEL
-and enables more sophisticated text and label string formatting. In such a case
-the label string is treated as html-formated text and all Fl_Help_View features
-are available, including images, tables, lists...
+fl_html_label is a small library (about 200 lines) for fltk 1.1.x which defines new labeltype
+FL_HTML_LABEL and enables more sophisticated text and label string formatting. In such a case
+the label string is treated as html-formated text and all Fl_Help_View features are available,
+ including images, tables, lists...
 
 Usage:
 
@@ -14,15 +14,16 @@ a) include fl_html.label.cxx in your project and fl_html_label.h where html form
 
 b) assign html labeltype to your widget like
        widget->labeltype(FL_HTML_LABEL);
-   By default, HTML labeltype is assigned to enumeration #15 within labeltype table. If you wish to use
-   different enumeration value, assign functions fl_draw_html() and fl_measure_html() to that other value
-   using Fl::set_labeltype() function or use eg. fl_define_html_label(FL_FREE_LABELTYPE).
+   By default, HTML labeltype is assigned to enumeration #15 within labeltype table. If you wish
+   to use different enumeration value, assign functions fl_draw_html() and fl_measure_html() 
+   to that other value using Fl::set_labeltype() function or use eg.
+       fl_define_html_label(FL_FREE_LABELTYPE).
 
 c) assign your html label like
        widget->label("<h1>This is my first<font color=""#00FF00"">HTML</font> label!</h1>");
 
-d) The measurement function tries to format the string with width as narrow as possible.
-   This my lead to mmany line breaks with each word placed on separate line. To avoid line breaks
+d) The measurement function tries to format the string  width as narrow as possible.
+   This may lead to mmany line breaks with each word placed on a separate line. To avoid line breaks
    within text use &nbsp; instead of white-space characters. You can also use <table> tag with
    specified width="xxx" to pre-define minimum width used for the label or its part.
 
