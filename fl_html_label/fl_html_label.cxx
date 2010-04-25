@@ -1,7 +1,7 @@
 // fl_html_label 1.0
 //
 // Copyright 2009 by Roman Kantor.
-// 
+//
 // License: LGPL + fltk exceptions, see license for fltk library at http://fltk.org
 //
 // This library is free software; you can redistribute it and/or
@@ -9,7 +9,7 @@
 // version 2 as published by the Free Software Foundation.
 //
 // This library is distributed  WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY 
+// without even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Library General Public License for more details.
 // You should have received a copy of the GNU Library General Public
@@ -128,7 +128,7 @@ public:
       }else if(!(align & FL_ALIGN_LEFT)) // center
           X += (W - hsize_)/2;
     }
-      
+
 
     // resize the widget INCLUDING scrollbart for proper drawing and avoiding clipping
     int ss = Fl::scrollbar_size();
@@ -207,13 +207,35 @@ void fl_measure_html(const char * html_text, int &w, int &h){
 }
 class Fl_Named_Image:public Fl_Shared_Image{
 public:
-  Fl_Named_Image(const char * name, Fl_Image *im):Fl_Shared_Image(name, im){add();}
+  Fl_Image * image(){return image_;}
+  void image(Fl_Image * im, int alloc){
+    if(im == this) return;
+    if(image_!=im){
+      if(alloc_image_) delete image_;
+      image_ = im;
+      alloc_image_ = alloc;
+      update();
+    }else if(!alloc) // its gona to be kept arround!
+      alloc_image_ = 0;
+  }
+  Fl_Named_Image(const char * name, Fl_Image *im, int alloc):Fl_Shared_Image(name, im){add();alloc_image_ = alloc;}
 };
 
-Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name){
+Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name, int allocate){
   Fl_Shared_Image * i = Fl_Shared_Image::find(name);
-  if(i) return i;
-  return new Fl_Named_Image(name, im);
+  if(i){
+    ((Fl_Named_Image *)i)->image(im, allocate);
+    return i;
+  }
+  return new Fl_Named_Image(name, im, allocate);
+}
+
+Fl_Image * fl_image_source(Fl_Shared_Image * im){
+  return ((Fl_Named_Image *)im)->image();
+}
+
+void fl_update_shared_image(Fl_Shared_Image  * im, Fl_Image * src, int alloc){
+  ((Fl_Named_Image*)im)->image(src, alloc);
 }
 
 

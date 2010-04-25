@@ -7,7 +7,7 @@
 // version 2 as published by the Free Software Foundation.
 //
 // This library is distributed  WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY 
+// without even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Library General Public License for more details.
 // You should have received a copy of the GNU Library General Public
@@ -82,10 +82,10 @@ class Ca_Canvas:public Fl_Box{
     Ca_ObjectChain * last_object_;
     Ca_ObjectChain * last_plotted_;
     void add_object(Ca_Object_ *object);
-    
+
     /* No function body - prevents copy construction/assignment */
-    Ca_Canvas(const Ca_Canvas &);    
-    const Ca_Canvas & operator=(const Ca_Canvas &); 
+    Ca_Canvas(const Ca_Canvas &);
+    const Ca_Canvas & operator=(const Ca_Canvas &);
     int dx_, dy_, dw_, dh_;
 
 public:
@@ -101,11 +101,11 @@ public:
     void border(int border);
     void clip_border(int dx, int dy, int dw, int dh){ dx_ = dx; dy_ = dy; dw_ = dw; dh_ = dh;}
     void clip_border(int * dx, int * dy, int *dw, int *dh){ *dx = dx_; *dy = dy_; *dw = dw_; *dh = dh_;}
-    
+
     Ca_ObjectChain * objects(){return first_object_;};
     Ca_Canvas(int x, int y, int w, int h, const char *label=0);
     ~Ca_Canvas();
-    
+
 };
 
 
@@ -117,8 +117,8 @@ class Ca_Axis_:public Fl_Box{
 
     Ca_Axis_ *previous_axis_;
 
-	
-	
+
+
 
 protected:
     Fl_Widget * widget_;
@@ -158,12 +158,12 @@ protected:
     int max_pos_;
     int border_;
     Fl_Color axis_color_;
-    
+
     virtual int min_pos()=0;
     virtual int max_pos()=0;
     int update();
     virtual void draw_grid()=0;
-    
+
 public:
   Fl_Widget * widget() const {return widget_;}
   void widget(Fl_Widget * w) {widget_ = w;}
@@ -173,13 +173,13 @@ public:
     Ca_Canvas * canvas(){return canvas_;};
     int border(){return border_;};
     void border(int border){border_=border;damage(CA_DAMAGE_ALL);}
-    double minimum() const {return min_;}; 
+    double minimum() const {return min_;};
     double maximum() const {return max_;};
     void minimum(double x);
     void maximum(double x);
     void clear(){valid_=0;};
     int cleared(){return !valid_;};
-    
+
     void rescale(int when, double x);
     void rescale_move(int when, double  x);
     void tick_interval(double interval) {tick_interval_=interval; damage(CA_DAMAGE_ALL);};
@@ -232,7 +232,7 @@ public:
     unsigned char axis_align(){return axis_align_;};
     void scale(int s){if(s!=scale_){redraw(); canvas_->redraw();} scale_=s;};
     int scale(){return scale_;};
-    
+
     Ca_Axis_(int x, int y, int w, int h, const char * label=0);
     ~Ca_Axis_();
 };
@@ -264,28 +264,28 @@ public:
     void current();
     Ca_Y_Axis(int x, int y, int w, int h, const char * label=0);
     ~Ca_Y_Axis();
-    
+
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
 class Ca_Object_{
-    
+
     friend class Ca_Canvas;
     friend class Ca_Axis_;
     friend class Ca_Y_Axis;
     friend class Ca_X_Axis;
 
-    // No function body - prevents copy construction/assignment 
-    Ca_Object_(const Ca_Object_ &);    
+    // No function body - prevents copy construction/assignment
+    Ca_Object_(const Ca_Object_ &);
     const Ca_Object_ & operator=(const Ca_Object_ &);
-    
+
 protected:
     Ca_Canvas *canvas_;
     Ca_Axis_ *x_axis_;
     Ca_Axis_ *y_axis_;
     virtual void draw()=0;
-        
+
 public:
   Ca_Canvas * canvas() const {return canvas_;}
     Ca_Object_(Ca_Canvas * canvas=0);
@@ -329,7 +329,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 
 class Ca_PolyLine:public Ca_LinePoint{
-	
+
 protected:
     void draw();
 public:
@@ -371,15 +371,15 @@ class Ca_Text:public Ca_Object_{
 
 protected:
     void draw();
-	
+
 public:
     double x1,x2,y1,y2;
-    char * label;
+    const char * label;
     uchar align;
     Fl_Color label_color;
     Fl_Font label_font;
     int label_size;
-    Ca_Text(double _x1, double _x2, double _y1, double _y2, char *_label, uchar _align=FL_ALIGN_CENTER, Fl_Font _label_font=FL_HELVETICA, int _label_size=CA_DEFAULT_LABEL_SIZE, Fl_Color _label_color=FL_BLACK);
+    Ca_Text(double _x1, double _x2, double _y1, double _y2, const char *_label, uchar _align=FL_ALIGN_CENTER, Fl_Font _label_font=FL_HELVETICA, int _label_size=CA_DEFAULT_LABEL_SIZE, Fl_Color _label_color=FL_BLACK);
     Ca_Text(double x, double y, char *_label=0, uchar _align=FL_ALIGN_CENTER, Fl_Font _label_font=FL_HELVETICA, int _label_size=CA_DEFAULT_LABEL_SIZE, Fl_Color _label_color=FL_BLACK);
 };
 
@@ -392,7 +392,7 @@ public:
     Fl_Color color;
     Fl_Color border_color;
     int border_width;
-    Ca_Bar(double _x1, double _x2, double _y1, double _y2, Fl_Color _color=FL_RED,  Fl_Color _border_color=FL_BLACK, int _border_width=0,  char *_label=0, uchar _align=FL_ALIGN_CENTER, Fl_Font _label_font=FL_HELVETICA, int _label_size=CA_DEFAULT_LABEL_SIZE, Fl_Color _label_color=FL_BLACK);
+    Ca_Bar(double _x1, double _x2, double _y1, double _y2, Fl_Color _color=FL_RED,  Fl_Color _border_color=FL_BLACK, int _border_width=0,  const char *_label=0, uchar _align=FL_ALIGN_CENTER, Fl_Font _label_font=FL_HELVETICA, int _label_size=CA_DEFAULT_LABEL_SIZE, Fl_Color _label_color=FL_BLACK);
 };
 
 

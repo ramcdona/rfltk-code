@@ -1439,7 +1439,7 @@ void Ca_Text::draw(){
 };
 
 
-Ca_Text::Ca_Text(double _x1, double _x2, double _y1, double _y2, char *_label, uchar _align, Fl_Font _label_font, int _label_size, Fl_Color _label_color)
+Ca_Text::Ca_Text(double _x1, double _x2, double _y1, double _y2, const char *_label, uchar _align, Fl_Font _label_font, int _label_size, Fl_Color _label_color)
 :Ca_Object_(0),
 x1(_x1), x2(_x2), y1(_y1), y2(_y2),
 label(_label),
@@ -1534,7 +1534,7 @@ void Ca_Bar::draw(){
 
 
 
-Ca_Bar::Ca_Bar(double _x1, double _x2, double _y1, double _y2, Fl_Color _color,  Fl_Color _border_color, int _border_width,  char *_label, uchar _align, Fl_Font _label_font, int _label_size, Fl_Color _label_color)
+Ca_Bar::Ca_Bar(double _x1, double _x2, double _y1, double _y2, Fl_Color _color,  Fl_Color _border_color, int _border_width,  const char *_label, uchar _align, Fl_Font _label_font, int _label_size, Fl_Color _label_color)
 :Ca_Text(_x1, _x2, _y1, _y2, _label, _align, _label_font, _label_size, _label_color),
 color(_color),
 border_color(_border_color),

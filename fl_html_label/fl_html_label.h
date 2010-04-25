@@ -1,7 +1,7 @@
 // fl_html_label 1.0
 //
 // Copyright 2009 by Roman Kantor.
-// 
+//
 // License: LGPL + fltk exceptions, see license for fltk library at http://fltk.org
 //
 // This library is free software; you can redistribute it and/or
@@ -9,7 +9,7 @@
 // version 2 as published by the Free Software Foundation.
 //
 // This library is distributed  WITHOUT ANY WARRANTY;
-// without even the implied warranty of MERCHANTABILITY 
+// without even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Library General Public License for more details.
 // You should have received a copy of the GNU Library General Public
@@ -24,7 +24,7 @@
 
 
 // For impatient:
-// Following functions are for instant use of FL_HTM_LABEL type 
+// Following functions are for instant use of FL_HTM_LABEL type
 // without the need to use Fl::set_labeltype() function
 
 FL_EXPORT Fl_Labeltype fl_define_html_label(int position);
@@ -52,7 +52,11 @@ FL_EXPORT void fl_measure_html(const char * html_text, int &w, int &h);
 
 
 
-Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name);
+Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name, int allocate = 0);
+Fl_Image * fl_image_source(Fl_Shared_Image * im);
+void fl_update_shared_image(Fl_Shared_Image  * im, Fl_Image * src, int allocate = 0);
+
+
 
 
 #endif // _fl_html_label_h_

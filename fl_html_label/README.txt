@@ -22,7 +22,7 @@ b) assign html labeltype to your widget like
 c) assign your html label like
        widget->label("<h1>This is my first<font color=""#00FF00"">HTML</font> label!</h1>");
 
-d) The measurement function tries to format the string  width as narrow as possible.
+d) The measurement function tries to format the string width as narrow as possible.
    This may lead to mmany line breaks with each word placed on a separate line. To avoid line breaks
    within text use &nbsp; instead of white-space characters. You can also use <table> tag with
    specified width="xxx" to pre-define minimum width used for the label or its part.
@@ -70,10 +70,10 @@ Using HTML strings outside labels
 
 Implementation:
   The implementation uses Fl_Help_View functionality (a single static instance of the class)
-  to perform the measurement and drawing. It is relatively dirty because it requires a trick to acces 
+  to perform the measurement and drawing. It is relatively dirty because it requires a trick to access 
   some private members of the class (there is smuggled "friend class..." to the Fl_Help_View when included
   in fl_html_label.cxx) and includes several work-arrounds due to some Fl_Help_View bugs (eg non-accurate
-  calculation of ducument height in certain circumstancies). The code compiles and work fine with MS VC
+  calculation of ducument height in certain circumstancies). The code compiles and works fine with MS VC
   and gcc, other compilers not tested. In the future (fltk-1.3?) it would make sense to make some methods public
   (or at least protested) although restructuralisation and possibility of plain use uf some generic measurement
   and drawing functions - without the need of the class instantiation - would be prefered.
