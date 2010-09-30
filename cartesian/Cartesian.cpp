@@ -519,16 +519,10 @@ void Ca_X_Axis::draw(){
               break;
     }
     fl_line_style(FL_SOLID|FL_CAP_FLAT,tick_width_);
-    if((axis_align_ & CA_LINE)){
-      fl_begin_line();
-      fl_vertex(min_pos(),l);
-      fl_vertex(max_pos(),l);
-      fl_vertex(W_->x()+Fl::box_dx(W_->box()),l);
-      fl_vertex(W_->x()+W_->w()+Fl::box_dx(W_->box())-Fl::box_dw(W_->box()),l);
-      //fl_vertex(x()+border_,l);
-      //fl_vertex(x()+w()-border_,l);
-      fl_end_line();
-    }
+    double start_tick;
+    double end_tick;
+    bool tick_not_started = 1;
+
     while(next_tick(tick_index, tick_value, tick_order, _interval)){
       _pos=position(tick_value);
       if(scale_&CA_REV){
@@ -550,6 +544,11 @@ void Ca_X_Axis::draw(){
           fl_vertex(_pos,m2);
           fl_end_loop();
         }
+        if(tick_not_started){
+          tick_not_started = 0;
+          start_tick = _pos;
+        }
+        end_tick = _pos;
       }
 
       if(!((tick_index % label_step_)|(axis_align_&CA_NO_LABELS))){
@@ -585,6 +584,18 @@ void Ca_X_Axis::draw(){
         }
         ca_text(label,_x,_y);
       }
+    }
+    if((axis_align_ & CA_LINE) && !tick_not_started){
+      fl_begin_line();
+      fl_vertex(start_tick,l);
+      fl_vertex(end_tick,l);
+
+      //fl_vertex(min_pos(),l);
+      //fl_vertex(max_pos(),l);
+      //fl_vertex(W_->x()+Fl::box_dx(W_->box()),l);
+      //fl_vertex(W_->x()+W_->w()+Fl::box_dx(W_->box())-Fl::box_dw(W_->box()),l);
+
+      fl_end_line();
     }
     fl_line_style(0,0);
     //  fl_pop_clip();
@@ -836,15 +847,11 @@ void Ca_Y_Axis::draw(){
     }
     fl_line_style(FL_SOLID|FL_CAP_FLAT,tick_width_);
     //		double minp,maxp;
+    double start_tick;
+    double end_tick;
+    bool tick_not_started = 1;
 
-    if(axis_align_ & CA_LINE){
-      fl_begin_line();
-      fl_vertex(l,W_->y()+Fl::box_dy(W_->box()));
-      fl_vertex(l,W_->y()+W_->h()+Fl::box_dy(W_->box())-Fl::box_dh(W_->box()));
-      //fl_vertex(x()+border_,l);
-      //fl_vertex(x()+w()-border_,l);
-      fl_end_line();
-    }
+
     while(next_tick(tick_index, tick_value, tick_order, _interval)){
       _pos=position(tick_value);
       if(scale_&CA_REV){
@@ -864,6 +871,11 @@ void Ca_Y_Axis::draw(){
           fl_vertex(m2,_pos);
         }
         fl_end_loop();
+        if(tick_not_started){
+          tick_not_started = 0;
+          start_tick = _pos;
+        }
+        end_tick = _pos;
       }
       if(!((tick_index % label_step_)|(axis_align_&CA_NO_LABELS))){
         char label[MAX_LABEL_LENGTH];
@@ -898,6 +910,15 @@ void Ca_Y_Axis::draw(){
         }
         ca_text(label,_x,_y);
       }
+    }
+    if((axis_align_ & CA_LINE) && !tick_not_started){
+      fl_begin_line();
+      fl_vertex(l,start_tick);
+      fl_vertex(l,end_tick);
+      //fl_vertex(l,W_->y()+Fl::box_dy(W_->box()));
+      //fl_vertex(l,W_->y()+W_->h()+Fl::box_dy(W_->box())-Fl::box_dh(W_->box()));
+
+      fl_end_line();
     }
     fl_line_style(0);
     fl_pop_clip();

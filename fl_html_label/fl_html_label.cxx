@@ -207,6 +207,8 @@ void fl_measure_html(const char * html_text, int &w, int &h){
 }
 class Fl_Named_Image:public Fl_Shared_Image{
 public:
+  int & refcount(){return refcount_;}
+
   Fl_Image * image(){return image_;}
   void image(Fl_Image * im, int alloc){
     if(im == this) return;
@@ -236,6 +238,12 @@ Fl_Image * fl_image_source(Fl_Shared_Image * im){
 
 void fl_update_shared_image(Fl_Shared_Image  * im, Fl_Image * src, int alloc){
   ((Fl_Named_Image*)im)->image(src, alloc);
+}
+
+void fl_destroy_shared_image(Fl_Shared_Image  * im){
+  while(im->refcount()>1)
+    im->release();
+  im->release();
 }
 
 

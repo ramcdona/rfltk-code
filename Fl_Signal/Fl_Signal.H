@@ -127,7 +127,7 @@ protected:
 	R res;      // here is stored return value of the callback
 
 	template<typename C>
-	static inline void execute(C  t){ t->exec_r();}; // this is work-arround for partial specialization of templated classes, not supported in VC6,
+	static inline void execute(C  t){ t->exec_r();} // this is work-arround for partial specialization of templated classes, not supported in VC6,
 
 public:
 	R value(){return res;};
@@ -140,7 +140,7 @@ class Fl_Cb_<void>:public Fl_Cb{           // explicit specialization for void
 protected:
 
 	template<typename C>
-	static inline void execute(C  t){t->exec();};
+	static inline void execute(C  t){t->exec();}
 };
 
 
@@ -149,23 +149,23 @@ protected:
 
 
 template <typename R, typename RES>
-inline R _get(R v){return v;};
+inline R _get(R v){return v;}
 
 template <typename R, typename RES>
-inline R _get(R * v){return *v;};
+inline R _get(R * v){return *v;}
 
 template <typename R, typename RES>
-inline R _get(Fl_Cb &v){return (*reinterpret_cast<RES *>(&v))();};
+inline R _get(Fl_Cb &v){return (*reinterpret_cast<RES *>(&v))();}
 
 
 template<typename P>
 class _Ref{
 public:
 	template<typename T>
-	static inline P r(T * p){return p;};
+	static inline P r(T * p){return p;}
 	static inline P * r(Fl_Cb & p){return (P*)(&p);};
   template <typename TT>
-  static inline P * r(Fl_Cb_<TT> & p){return (P*)(&p);};
+  static inline P * r(Fl_Cb_<TT> & p){return (P*)(&p);}
 };
 
 
@@ -674,68 +674,68 @@ public:
 ////////////////////  slot(...) functions  /////////////////
 
 template<typename R, typename A1>
-inline Fl_Cb_f1p<R,A1> fl_slot(R(*f)(A1)){return Fl_Cb_f1p<R,A1>(f);};
+inline Fl_Cb_f1p<R,A1> fl_slot(R(*f)(A1)){return Fl_Cb_f1p<R,A1>(f);}
 
 template<typename R, typename A1, typename R_>
-inline Fl_Cb_f1rp<R,A1,R_> fl_slot(R(*f)(A1)){return Fl_Cb_f1rp<R,A1,R_>(f);};
+inline Fl_Cb_f1rp<R,A1,R_> fl_slot(R(*f)(A1)){return Fl_Cb_f1rp<R,A1,R_>(f);}
 
 
 template<typename R, typename O, typename O_, typename A1>
-inline Fl_Cb_m1p<R,O,O_,A1> fl_slot(O_ o, R(O::*m)(A1)){return Fl_Cb_m1p<R,O,O_,A1>(o, m);};
+inline Fl_Cb_m1p<R,O,O_,A1> fl_slot(O_ o, R(O::*m)(A1)){return Fl_Cb_m1p<R,O,O_,A1>(o, m);}
 
 template<typename R, typename O, typename O_, typename A1>
-inline Fl_Cb_m1p<R,O,O_,A1> fl_slot(O_ o, R(O::*m)(A1)const){return Fl_Cb_m1p<R,O,O_,A1>(o, m);};
+inline Fl_Cb_m1p<R,O,O_,A1> fl_slot(O_ o, R(O::*m)(A1)const){return Fl_Cb_m1p<R,O,O_,A1>(o, m);}
 
 template<typename R, typename O, typename O_, typename A1, typename R_>
-inline Fl_Cb_m1rp<R,O,O_,A1,R_> fl_slot(O_ o, R(O::*m)(A1), R_ r){return Fl_Cb_m1rp<R,O,O_,A1,R_>(o, m, r);};
+inline Fl_Cb_m1rp<R,O,O_,A1,R_> fl_slot(O_ o, R(O::*m)(A1), R_ r){return Fl_Cb_m1rp<R,O,O_,A1,R_>(o, m, r);}
 
 template<typename R, typename O, typename O_, typename A1, typename R_>
-inline Fl_Cb_m1rp<R,O,O_,A1,R_> fl_slot(O_ o, R(O::*m)(A1)const, R_ r){return Fl_Cb_m1rp<R,O,O_,A1,R_>(o, m, r);};
+inline Fl_Cb_m1rp<R,O,O_,A1,R_> fl_slot(O_ o, R(O::*m)(A1)const, R_ r){return Fl_Cb_m1rp<R,O,O_,A1,R_>(o, m, r);}
 
 
 /////////////////// call(...) functions  //////////////////////
 
 
 template<typename R>
-inline Fl_Cb_f0<R> fl_call(R(*f)()){return  Fl_Cb_f0<R>(f);};
+inline Fl_Cb_f0<R> fl_call(R(*f)()){return  Fl_Cb_f0<R>(f);}
 
 template<typename R, typename R_>
-inline Fl_Cb_f0r<R,R_> fl_call(R(*f)(), R_ r){return Fl_Cb_f0r<R,R_>(f, r);};
+inline Fl_Cb_f0r<R,R_> fl_call(R(*f)(), R_ r){return Fl_Cb_f0r<R,R_>(f, r);}
 
 
 template<typename R, typename O, typename O_>
-inline Fl_Cb_m0<R,O,O_> fl_call( O_ o, R(O::*m)()){return Fl_Cb_m0<R,O,O_>(o, m);};
+inline Fl_Cb_m0<R,O,O_> fl_call( O_ o, R(O::*m)()){return Fl_Cb_m0<R,O,O_>(o, m);}
 
 template<typename R, typename O, typename O_>
-inline Fl_Cb_m0<R,O,O_> fl_call(O_ o, R(O::*m)() const){return Fl_Cb_m0<R,O,O_>(o, m);};
+inline Fl_Cb_m0<R,O,O_> fl_call(O_ o, R(O::*m)() const){return Fl_Cb_m0<R,O,O_>(o, m);}
 
 template<typename R, typename O, typename O_, typename R_>
-inline Fl_Cb_m0r<R,O,O_,R_> fl_call(O_ o ,R(O::*m)(), R_ r){return Fl_Cb_m0r<R,O,O_,R_>(o, m, r);};
+inline Fl_Cb_m0r<R,O,O_,R_> fl_call(O_ o ,R(O::*m)(), R_ r){return Fl_Cb_m0r<R,O,O_,R_>(o, m, r);}
 
 template<typename R, typename O, typename O_, typename R_>
-inline Fl_Cb_m0r<R,O,O_,R_> fl_call( O_ o, R(O::*m)() const, R_ r){return Fl_Cb_m0r<R,O,O_,R_>(o, m, r);};
+inline Fl_Cb_m0r<R,O,O_,R_> fl_call( O_ o, R(O::*m)() const, R_ r){return Fl_Cb_m0r<R,O,O_,R_>(o, m, r);}
 
 
 /////////////////// 1 argument /////////////////////////////////
 
 template<typename R, typename A1, typename A1_>
-inline Fl_Cb_f1<R,A1,A1_> fl_call(R(*f)(A1), A1_ a1){return Fl_Cb_f1<R,A1,A1_>(f, a1);};
+inline Fl_Cb_f1<R,A1,A1_> fl_call(R(*f)(A1), A1_ a1){return Fl_Cb_f1<R,A1,A1_>(f, a1);}
 
 template<typename R, typename A1, typename A1_, typename R_>
-inline Fl_Cb_f1r<R,A1,A1_,R_> fl_call(R(*f)(A1), A1_ a1, R_ r){return Fl_Cb_f1r<R,A1,A1_,R_>(f, a1, r);};
+inline Fl_Cb_f1r<R,A1,A1_,R_> fl_call(R(*f)(A1), A1_ a1, R_ r){return Fl_Cb_f1r<R,A1,A1_,R_>(f, a1, r);}
 
 
 template<typename R, typename O, typename A1, typename O_, typename A1_>
-inline Fl_Cb_m1<R,O,O_,A1,A1_> fl_call(O_ o , R(O::*m)(A1), A1_ a1){return  Fl_Cb_m1<R,O,O_,A1,A1_>(o, m, a1);};
+inline Fl_Cb_m1<R,O,O_,A1,A1_> fl_call(O_ o , R(O::*m)(A1), A1_ a1){return  Fl_Cb_m1<R,O,O_,A1,A1_>(o, m, a1);}
 
 template<typename R, typename O, typename A1, typename O_, typename A1_>
-inline Fl_Cb_m1<R,O,O_,A1,A1_> fl_call(O_ o , R(O::*m)(A1) const, A1_ a1){return Fl_Cb_m1<R,O,O_,A1,A1_>(o, m, a1);};
+inline Fl_Cb_m1<R,O,O_,A1,A1_> fl_call(O_ o , R(O::*m)(A1) const, A1_ a1){return Fl_Cb_m1<R,O,O_,A1,A1_>(o, m, a1);}
 
 template<typename R, typename O, typename A1, typename O_, typename A1_, typename R_>
-inline Fl_Cb_m1r<R,O,O_,A1,A1_,R_> fl_call(O_ o , R(O::*m)(A1), A1_ a1, R_ r){return Fl_Cb_m1r<R,O,O_,A1,A1_,R_>(o, m, a1, r);};
+inline Fl_Cb_m1r<R,O,O_,A1,A1_,R_> fl_call(O_ o , R(O::*m)(A1), A1_ a1, R_ r){return Fl_Cb_m1r<R,O,O_,A1,A1_,R_>(o, m, a1, r);}
 
 template<typename R, typename O, typename A1, typename O_, typename A1_, typename R_>
-inline Fl_Cb_m1r<R,O,O_,A1,A1_,R_> fl_call(O_ o , R(O::*m)(A1) const, A1_ a1, R_ r){return Fl_Cb_m1r<R,O,O_,A1,A1_,R_>(o, m, a1, r);};
+inline Fl_Cb_m1r<R,O,O_,A1,A1_,R_> fl_call(O_ o , R(O::*m)(A1) const, A1_ a1, R_ r){return Fl_Cb_m1r<R,O,O_,A1,A1_,R_>(o, m, a1, r);}
 
 
 

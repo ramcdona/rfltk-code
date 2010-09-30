@@ -55,6 +55,7 @@ FL_EXPORT void fl_measure_html(const char * html_text, int &w, int &h);
 Fl_Shared_Image * fl_name_image(Fl_Image * im, const char * name, int allocate = 0);
 Fl_Image * fl_image_source(Fl_Shared_Image * im);
 void fl_update_shared_image(Fl_Shared_Image  * im, Fl_Image * src, int allocate = 0);
+void fl_destroy_shared_image(Fl_Shared_Image  * im);
 
 
 
