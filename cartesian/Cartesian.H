@@ -23,6 +23,7 @@
 #define DEFAULT_POINT_SIZE 4
 #define CA_DEFAULT_LABEL_SIZE 12
 
+#define DEFAULT_WIDTH 4
 
 
 
@@ -205,7 +206,7 @@ public:
     Fl_Color axis_color(){ return axis_color_;};
     void minor_grid_color(Fl_Color color){minor_grid_color_=color; canvas_->damage(CA_DAMAGE_ALL);};
     Fl_Color minor_grid_color(){return minor_grid_color_;};
-    void minor_grid_style(int style, int width=0, char * dashes=0){minor_grid_style_=style;minor_grid_width_=width;minor_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
+    void minor_grid_style(int style, int width=DEFAULT_WIDTH, char * dashes=0){minor_grid_style_=style;minor_grid_width_=width;minor_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
     void minor_grid_style(int * style, int * width=0, char ** dashes=0){
 	if (style) *style=minor_grid_style_;
 	    if (width) *width=minor_grid_width_;
@@ -213,7 +214,7 @@ public:
 	};
     void major_grid_color(Fl_Color color){major_grid_color_=color;  canvas_->damage(CA_DAMAGE_ALL);};
     Fl_Color major_grid_color(){return major_grid_color_;};
-    void major_grid_style(int style, int width=0, char * dashes=0){major_grid_style_=style; major_grid_width_=width; major_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
+    void major_grid_style(int style, int width=DEFAULT_WIDTH, char * dashes=0){major_grid_style_=style; major_grid_width_=width; major_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
     void major_grid_style(int * style, int * width=0, char ** dashes=0){
         if (style) *style=major_grid_style_;
         if (width) *width=major_grid_width_;
@@ -221,7 +222,7 @@ public:
     };
     void label_grid_color(Fl_Color color){label_grid_color_=color;  canvas_->damage(CA_DAMAGE_ALL);};
     Fl_Color label_grid_color(){return label_grid_color_;};
-    void label_grid_style(int style, int width=0, char * dashes=0){label_grid_style_=style; label_grid_width_=width; label_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
+    void label_grid_style(int style, int width=DEFAULT_WIDTH, char * dashes=0){label_grid_style_=style; label_grid_width_=width; label_grid_dashes_=dashes; canvas_->damage(CA_DAMAGE_ALL);};
     void label_grid_style(int * style, int * width=0, char ** dashes=0){
         if (style) *style=label_grid_style_;
         if (width) *width=label_grid_width_;
