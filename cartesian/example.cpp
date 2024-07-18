@@ -7,7 +7,7 @@
 // version 2 as published by the Free Software Foundation.
 //
 // This library is distributed  WITHOUT ANY WARRANTY;
-// WITHOUT even the implied warranty of MERCHANTABILITY 
+// WITHOUT even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Library General Public License for more details.
 // You should have received a copy of the GNU Library General Public
@@ -24,8 +24,7 @@
 
 #include <FL/Fl_Overlay_Window.H>
 #include <FL/Fl_Light_Button.H>
-#include "../Cartesian.H"
-#include "../Cartesian.cpp"
+#include "Cartesian.H"
 #include <FL/fl_draw.H>
 
 
@@ -41,26 +40,26 @@
 
 
 void print(Fl_Widget *, void *w) {
-	Fl_Widget * g = (Fl_Widget *)w;
-	char * filename = fl_file_chooser("Print to file...","*.ps","*.ps");
-	if(!filename) return;
-	FILE * f = fopen(filename,"w");
-	if(!f) return;
-	Fl_Printer * p = new Fl_PostScript(f, 3, Fl_Printer::A4, Fl_Printer::PORTRAIT);
-	p->page();
-	p->fit(g, FL_ALIGN_CENTER);
-	p->draw(g);
-	delete p;
+    Fl_Widget * g = (Fl_Widget *)w;
+    char * filename = fl_file_chooser("Print to file...","*.ps","*.ps");
+    if(!filename) return;
+    FILE * f = fopen(filename,"w");
+    if(!f) return;
+    Fl_Printer * p = new Fl_PostScript(f, 3, Fl_Printer::A4, Fl_Printer::PORTRAIT);
+    p->page();
+    p->fit(g, FL_ALIGN_CENTER);
+    p->draw(g);
+    delete p;
 };
 
 void print2(Fl_Widget *, void *w) {
-	Fl_Widget * g = (Fl_Widget *)w;
-	Fl_Printer * p = fl_gdi_printer_chooser();
-	if(!p) return;
-	p->page();
-	p->fit(g, FL_ALIGN_CENTER);
-	p->draw(g);
-	delete p;
+    Fl_Widget * g = (Fl_Widget *)w;
+    Fl_Printer * p = fl_gdi_printer_chooser();
+    if(!p) return;
+    p->page();
+    p->fit(g, FL_ALIGN_CENTER);
+    p->draw(g);
+    delete p;
 
 };
 
@@ -88,7 +87,7 @@ double U=1;
 Ca_Canvas *canvas;
 
 void type_callback(Fl_Widget *, void *){
-	power->scale((CA_LOG*logarithmic->value())|CA_REV*reversed->value());
+    power->scale((CA_LOG*logarithmic->value())|CA_REV*reversed->value());
 }
 
 void  next_freq(void *){
@@ -104,8 +103,8 @@ void  next_freq(void *){
     P=I*I*R;
     fi=atan((XL-XC)/R);
 
-    
-    
+
+
     phase->current();                                //setting coordinate
     new Ca_Point(f,fi,FL_YELLOW,CA_DIAMOND|CA_BORDER);current->current();                                //setting coordinate
 
@@ -121,10 +120,10 @@ void  next_freq(void *){
     f =f* FREQ_COEF;
     if(f<=MAX_FREQ)
         Fl::add_timeout(.1,next_freq);
-	else{
-		power->current();
-		//new Ca_Text(1000,1,"Text\ntest!");
-	}
+    else{
+        power->current();
+        //new Ca_Text(1000,1,"Text\ntest!");
+    }
 };
 
 
@@ -142,7 +141,7 @@ int main(int argc, char ** argv) {
     w->size_range(450,250);
 
 
-	Fl_Group *c =new Fl_Group(0, 35, 580, 345 );
+    Fl_Group *c =new Fl_Group(0, 35, 580, 345 );
 
     c->box(FL_DOWN_BOX);
     c->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
@@ -152,13 +151,13 @@ int main(int argc, char ** argv) {
     canvas->color(7);
     canvas->align(FL_ALIGN_TOP);
     Fl_Group::current()->resizable(canvas);
-	// w->resizable(canvas);
+    // w->resizable(canvas);
     canvas->border(15);
 
     frequency = new Ca_X_Axis(180, 305, 300, 30, "Frequency [Hz]");
     frequency->labelsize(14);
     frequency->align(FL_ALIGN_BOTTOM);
-	frequency->scale(CA_LOG);
+    frequency->scale(CA_LOG);
     frequency->minimum(MIN_FREQ);
     frequency->maximum(MAX_FREQ);
     frequency->label_format("%g");
@@ -168,10 +167,10 @@ int main(int argc, char ** argv) {
     frequency->grid_visible(CA_MINOR_GRID|CA_MAJOR_GRID|CA_LABEL_GRID);
     frequency->major_step(10);
     frequency->label_step(10);
-	frequency->axis_color(FL_BLACK);
-	frequency->axis_align(CA_BOTTOM|CA_LINE);
+    frequency->axis_color(FL_BLACK);
+    frequency->axis_align(CA_BOTTOM|CA_LINE);
 
-     
+
     current = new Ca_Y_Axis(137, 70, 43, 235 /*, "I [mA]" */);
 #ifdef USE_ROTATED_TEXT
     current->image(&current_label);
@@ -182,25 +181,25 @@ int main(int argc, char ** argv) {
 #endif
     //current->align(FL_ALIGN_TOP_RIGHT);
 
-	current->minor_grid_style(FL_DASH);
+    current->minor_grid_style(FL_DASH);
     current->axis_align(CA_LEFT);
-	current->axis_color(FL_BLACK);
- 
+    current->axis_color(FL_BLACK);
+
 
 
 
     power = new Ca_Y_Axis(10, 70, 75, 235, "P [mW]");
     power->box(FL_DOWN_BOX);
     power->align(FL_ALIGN_TOP);
-	power->grid_visible(CA_MINOR_TICK|CA_MAJOR_TICK|CA_LABEL_GRID|CA_ALWAYS_VISIBLE);
+    power->grid_visible(CA_MINOR_TICK|CA_MAJOR_TICK|CA_LABEL_GRID|CA_ALWAYS_VISIBLE);
 
-	power->minor_grid_color(FL_RED);
-	power->major_grid_color(FL_RED);
-	power->label_grid_color(FL_RED);
-	power->minimum(0.01);                    //setting beginning range
+    power->minor_grid_color(FL_RED);
+    power->major_grid_color(FL_RED);
+    power->label_grid_color(FL_RED);
+    power->minimum(0.01);                    //setting beginning range
     power->maximum(1);
 
-    
+
     phase = new Ca_Y_Axis(480, 70, 45, 235);
 #ifdef USE_ROTATED_TEXT
     phase->image(&phase_label);
@@ -209,7 +208,7 @@ int main(int argc, char ** argv) {
     phase->label("Phase [rad]");
     phase->align(FL_ALIGN_LEFT|FL_ALIGN_TOP);
 #endif
-    
+
     phase->minimum(-PI);
     phase->maximum(PI);
     phase->axis_align(CA_RIGHT);
@@ -218,35 +217,35 @@ int main(int argc, char ** argv) {
     phase->label_step(4);
     phase->label_format("%.2f");
 
-	power->current();
+    power->current();
 
-	new Ca_Bar(7000, 12000, 0.0011, 0.9, FL_RED,  FL_BLACK, 4,  "Bar", FL_ALIGN_TOP, FL_HELVETICA);
-	new Ca_Bar(5000, 10000, 0.0011, 0.4, FL_GREEN,  FL_BLACK, 4,  "Sec.\nbar", FL_ALIGN_TOP|FL_ALIGN_INSIDE, FL_HELVETICA);
-	
-
-    
-	logarithmic=new Fl_Light_Button(10,310, 75, 25, "Log");
-	logarithmic->callback(&type_callback);
+    new Ca_Bar(7000, 12000, 0.0011, 0.9, FL_RED,  FL_BLACK, 4,  "Bar", FL_ALIGN_TOP, FL_HELVETICA);
+    new Ca_Bar(5000, 10000, 0.0011, 0.4, FL_GREEN,  FL_BLACK, 4,  "Sec.\nbar", FL_ALIGN_TOP|FL_ALIGN_INSIDE, FL_HELVETICA);
 
 
-	reversed= new Fl_Light_Button(10,340, 75, 25, "Rev");
-	reversed->callback(&type_callback);
-	c->end();
 
-#ifdef FL_DEVICE	
-	Fl_Button *b2 = new Fl_Button(5,5, 90, 25, "Print to file");
-	b2->callback(print,c);
+    logarithmic=new Fl_Light_Button(10,310, 75, 25, "Log");
+    logarithmic->callback(&type_callback);
 
-	Fl_Button *b3 = new Fl_Button(105,5, 90, 25, "Print");
-	b3->callback(print2,c);
+
+    reversed= new Fl_Light_Button(10,340, 75, 25, "Rev");
+    reversed->callback(&type_callback);
+    c->end();
+
+#ifdef FL_DEVICE
+    Fl_Button *b2 = new Fl_Button(5,5, 90, 25, "Print to file");
+    b2->callback(print,c);
+
+    Fl_Button *b3 = new Fl_Button(105,5, 90, 25, "Print");
+    b3->callback(print2,c);
 
 #endif
-	
+
     Fl_Group::current()->resizable(c);
     w->end();
     w->show(argc, argv);
     Fl::add_timeout(0,next_freq);
-	Fl::run();
-	return 0;
+    Fl::run();
+    return 0;
 };
 
