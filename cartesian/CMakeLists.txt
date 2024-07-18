@@ -15,6 +15,6 @@ example.cpp
 
 TARGET_LINK_LIBRARIES( Ca_Example
 	cartesian
-	${FLTK_LIBRARIES}
+	fltk::gl
 )
 
